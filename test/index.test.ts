@@ -1,4 +1,8 @@
-import { test, assertEqual } from "https://deno.land/x/testing/testing.ts";
+import {
+  test,
+  assertEqual,
+  runTests,
+} from "https://deno.land/x/testing/mod.ts";
 import parse from "../index.ts";
 
 test(function blankStrings() {
@@ -11,10 +15,10 @@ test(function declarations() {
   assertEqual(node, {
     declaration: {
       attributes: {
-        version: "1.0"
-      }
+        version: "1.0",
+      },
     },
-    root: undefined
+    root: undefined,
   });
 });
 
@@ -24,7 +28,7 @@ test(function comments() {
     name: "foo",
     attributes: {},
     children: [],
-    content: ""
+    content: "",
   });
 });
 
@@ -34,7 +38,7 @@ test(function tags() {
     name: "foo",
     attributes: {},
     children: [],
-    content: ""
+    content: "",
   });
 });
 
@@ -44,7 +48,7 @@ test(function tagsWithText() {
     name: "foo",
     attributes: {},
     children: [],
-    content: "hello world"
+    content: "hello world",
   });
 });
 
@@ -54,21 +58,23 @@ test(function weirdWhitespace() {
     name: "foo",
     attributes: { bar: "baz" },
     children: [],
-    content: "hello world"
+    content: "hello world",
   });
 });
 
 test(function tagsWithAttributes() {
-  const node = parse("<foo bar=baz some=\"stuff here\" whatever='whoop'></foo>");
+  const node = parse(
+    "<foo bar=baz some=\"stuff here\" whatever='whoop'></foo>"
+  );
   assertEqual(node.root, {
     name: "foo",
     attributes: {
       bar: "baz",
       some: "stuff here",
-      whatever: "whoop"
+      whatever: "whoop",
     },
     children: [],
-    content: ""
+    content: "",
   });
 });
 
@@ -86,13 +92,13 @@ test(function nestedTags() {
             name: "c",
             attributes: {},
             children: [],
-            content: "hello"
-          }
+            content: "hello",
+          },
         ],
-        content: ""
-      }
+        content: "",
+      },
     ],
-    content: ""
+    content: "",
   });
 });
 
@@ -110,13 +116,13 @@ test(function tagsWithText() {
             name: "c",
             attributes: {},
             children: [],
-            content: "baz"
-          }
+            content: "baz",
+          },
         ],
-        content: "bar "
-      }
+        content: "bar ",
+      },
     ],
-    content: "foo "
+    content: "foo ",
   });
 });
 
@@ -130,23 +136,23 @@ test(function selfClosingTags() {
         name: "b",
         attributes: {},
         children: [],
-        content: "foo"
+        content: "foo",
       },
       {
         name: "b",
         attributes: {
-          a: "bar"
+          a: "bar",
         },
-        children: []
+        children: [],
       },
       {
         name: "b",
         attributes: {},
         children: [],
-        content: "bar"
-      }
+        content: "bar",
+      },
     ],
-    content: ""
+    content: "",
   });
 });
 
@@ -160,21 +166,21 @@ test(function selfClosingTagsWithoutAttributes() {
         name: "b",
         attributes: {},
         children: [],
-        content: "foo"
-      },
-      {
-        name: "b",
-        attributes: {},
-        children: []
+        content: "foo",
       },
       {
         name: "b",
         attributes: {},
         children: [],
-        content: "bar"
-      }
+      },
+      {
+        name: "b",
+        attributes: {},
+        children: [],
+        content: "bar",
+      },
     ],
-    content: ""
+    content: "",
   });
 });
 
@@ -184,7 +190,7 @@ test(function multilineComments() {
     name: "a",
     attributes: {},
     children: [],
-    content: "foo"
+    content: "foo",
   });
 });
 
@@ -193,10 +199,10 @@ test(function attributesWithHyphen() {
   assertEqual(node.root, {
     name: "a",
     attributes: {
-      "data-bar": "baz"
+      "data-bar": "baz",
     },
     children: [],
-    content: "foo"
+    content: "foo",
   });
 });
 
@@ -215,12 +221,12 @@ test(function tagsWithDot() {
           {
             name: "o:Column",
             attributes: {
-              Ref: "ol1"
+              Ref: "ol1",
             },
-            children: []
-          }
+            children: [],
+          },
         ],
-        content: ""
+        content: "",
       },
       {
         name: "c:Key.Columns",
@@ -229,15 +235,15 @@ test(function tagsWithDot() {
           {
             name: "o:Column",
             attributes: {
-              Ref: "ol2"
+              Ref: "ol2",
             },
-            children: []
-          }
+            children: [],
+          },
         ],
-        content: ""
-      }
+        content: "",
+      },
     ],
-    content: ""
+    content: "",
   });
 });
 
@@ -257,14 +263,16 @@ test(function tagsWithHyphen() {
         name: "data-field1",
         attributes: {},
         children: [],
-        content: "val1"
+        content: "val1",
       },
       {
         name: "data-field2",
         attributes: {},
         children: [],
-        content: "val2"
-      }
-    ]
+        content: "val2",
+      },
+    ],
   });
 });
+
+runTests();

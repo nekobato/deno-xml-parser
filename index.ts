@@ -1,17 +1,21 @@
 interface Document {
   declaration: {
-    attributes: {};
+    attributes: XmlAttributes
   };
   root: {
     name: string;
-    attributes: {};
-    children: any[];
+    attributes: XmlAttributes;
+    children: Xml[];
   };
+}
+
+type XmlAttributes = {
+  [name: string]: string;
 }
 
 interface Xml {
   name: string;
-  attributes: object;
+  attributes: XmlAttributes;
   content?: string;
   children: Xml[];
 }
@@ -36,7 +40,7 @@ export default function parse(xml: string): Document {
    * XML document.
    */
 
-  function document() {
+  function document(): Document {
     return {
       declaration: declaration(),
       root: tag()
@@ -72,7 +76,7 @@ export default function parse(xml: string): Document {
    * Tag.
    */
 
-  function tag() {
+  function tag(): Xml {
     var m = match(/^<([\w-:.]+)\s*/);
     if (!m) return;
 
@@ -126,7 +130,7 @@ export default function parse(xml: string): Document {
    * Attribute.
    */
 
-  function attribute() {
+  function attribute(): XmlAttributes {
     var m = match(/([\w:-]+)\s*=\s*("[^"]*"|'[^']*'|\w+)\s*/);
     if (!m) return;
     return { name: m[1], value: strip(m[2]) };

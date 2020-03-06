@@ -6,12 +6,12 @@ interface Document {
     name: string;
     attributes: {};
     children: any[];
-  };
+  } | undefined;
 }
 
 interface Xml {
   name: string;
-  attributes: object;
+  attributes: any;
   content?: string;
   children: Xml[];
 }
@@ -36,7 +36,7 @@ export default function parse(xml: string): Document {
    * XML document.
    */
 
-  function document() {
+  function document(): Document {
     return {
       declaration: declaration(),
       root: tag()
@@ -52,7 +52,7 @@ export default function parse(xml: string): Document {
     if (!m) return;
 
     // tag
-    var node = {
+    var node: any = {
       attributes: {}
     };
 

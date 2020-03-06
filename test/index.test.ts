@@ -1,18 +1,17 @@
 import {
-  test,
-  assertEqual,
-  runTests,
-} from "https://deno.land/x/testing/mod.ts";
+  assertEquals,
+} from "https://deno.land/std/testing/asserts.ts";
 import parse from "../index.ts";
+const { test, runTests } = Deno
 
 test(function blankStrings() {
   const node = parse("");
-  assertEqual(node, { declaration: undefined, root: undefined });
+  assertEquals(node, { declaration: undefined, root: undefined });
 });
 
 test(function declarations() {
   const node = parse('<?xml version="1.0" ?>');
-  assertEqual(node, {
+  assertEquals(node, {
     declaration: {
       attributes: {
         version: "1.0",
@@ -24,7 +23,7 @@ test(function declarations() {
 
 test(function comments() {
   const node = parse("<!-- hello --><foo></foo><!-- world -->");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "foo",
     attributes: {},
     children: [],
@@ -34,7 +33,7 @@ test(function comments() {
 
 test(function tags() {
   const node = parse("<foo></foo>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "foo",
     attributes: {},
     children: [],
@@ -44,7 +43,7 @@ test(function tags() {
 
 test(function tagsWithText() {
   const node = parse("<foo>hello world</foo>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "foo",
     attributes: {},
     children: [],
@@ -54,7 +53,7 @@ test(function tagsWithText() {
 
 test(function weirdWhitespace() {
   const node = parse("<foo \n\n\nbar\n\n=   \nbaz>\n\nhello world</\n\nfoo>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "foo",
     attributes: { bar: "baz" },
     children: [],
@@ -66,7 +65,7 @@ test(function tagsWithAttributes() {
   const node = parse(
     "<foo bar=baz some=\"stuff here\" whatever='whoop'></foo>"
   );
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "foo",
     attributes: {
       bar: "baz",
@@ -80,7 +79,7 @@ test(function tagsWithAttributes() {
 
 test(function nestedTags() {
   const node = parse("<a><b><c>hello</c></b></a>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {},
     children: [
@@ -104,7 +103,7 @@ test(function nestedTags() {
 
 test(function tagsWithText() {
   const node = parse("<a>foo <b>bar <c>baz</c></b></a>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {},
     children: [
@@ -128,7 +127,7 @@ test(function tagsWithText() {
 
 test(function selfClosingTags() {
   const node = parse('<a><b>foo</b><b a="bar" /><b>bar</b></a>');
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {},
     children: [
@@ -158,7 +157,7 @@ test(function selfClosingTags() {
 
 test(function selfClosingTagsWithoutAttributes() {
   const node = parse("<a><b>foo</b><b /> <b>bar</b></a>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {},
     children: [
@@ -186,7 +185,7 @@ test(function selfClosingTagsWithoutAttributes() {
 
 test(function multilineComments() {
   const node = parse("<a><!-- multi-line\n comment\n test -->foo</a>");
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {},
     children: [],
@@ -196,7 +195,7 @@ test(function multilineComments() {
 
 test(function attributesWithHyphen() {
   const node = parse('<a data-bar="baz">foo</a>');
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "a",
     attributes: {
       "data-bar": "baz",
@@ -210,7 +209,7 @@ test(function tagsWithDot() {
   const node = parse(
     '<root><c:Key.Columns><o:Column Ref="ol1"/></c:Key.Columns><c:Key.Columns><o:Column Ref="ol2"/></c:Key.Columns></root>'
   );
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "root",
     attributes: {},
     children: [
@@ -254,7 +253,7 @@ test(function tagsWithHyphen() {
       "<data-field2>val2</data-field2>" +
       "</root>"
   );
-  assertEqual(node.root, {
+  assertEquals(node.root, {
     name: "root",
     attributes: {},
     content: "",

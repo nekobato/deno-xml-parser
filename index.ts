@@ -1,17 +1,13 @@
-interface Document {
+export interface Document {
   declaration: {
-    attributes: {};
+    attributes: Record<string, any>;
   };
-  root: {
-    name: string;
-    attributes: {};
-    children: any[];
-  } | undefined;
+  root: Xml | undefined;
 }
 
-interface Xml {
+export interface Xml {
   name: string;
-  attributes: any;
+  attributes: Record<string, any>;
   content?: string;
   children: Xml[];
 }

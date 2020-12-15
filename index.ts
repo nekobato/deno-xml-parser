@@ -27,8 +27,8 @@ interface Xml {
 export default function parse(xml: string): Document {
   xml = xml.trim();
 
-  // strip comments
-  xml = xml.replace(/<!--[\s\S]*?-->/g, "");
+  // strip comments, whitespaces and newlines
+  xml = xml.replace(/((?<=>)(\s+)|^\s+|<!--[\s\S]*?-->)/g, "");
 
   return document();
 

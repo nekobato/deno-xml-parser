@@ -274,4 +274,3 @@ test("tagsWithHyphen", () => {
   });
 });
 
-runTests();

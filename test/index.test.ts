@@ -274,3 +274,33 @@ test("tagsWithHyphen", () => {
   });
 });
 
+test("Multiline comment at beginning", () => {
+  const node = parse(`
+    <!-- Test 
+       Long comment
+    -->
+    <root>
+      <data-field1>val1</data-field1>
+      <data-field2>val2</data-field2>
+    </root>`
+  );
+  assertEquals(node.root, {
+    name: "root",
+    attributes: {},
+    content: "",
+    children: [
+      {
+        name: "data-field1",
+        attributes: {},
+        children: [],
+        content: "val1",
+      },
+      {
+        name: "data-field2",
+        attributes: {},
+        children: [],
+        content: "val2",
+      },
+    ],
+  });
+});
